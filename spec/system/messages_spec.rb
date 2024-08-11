@@ -18,8 +18,9 @@ RSpec.describe 'メッセージ投稿機能', type: :system do
       expect {
         find('input[name="commit"]').click
       }.not_to change { Message.count }
+
       # 元のページに戻ってくることを確認する
-    expect(page).to have_current_path(room_messages_path(@room_user.room))
+      expect(page).to have_current_path(room_messages_path(@room_user.room))
     end
   end
 
@@ -34,13 +35,16 @@ RSpec.describe 'メッセージ投稿機能', type: :system do
       # 値をテキストフォームに入力する
       post = 'テスト'
       fill_in 'message_content', with: post
+
       # 送信した値がDBに保存されていることを確認する
       expect {
         find('input[name="commit"]').click
         sleep 1
       }.to change { Message.count }.by(1)
+
       # 投稿一覧画面に遷移していることを確認する
       expect(page).to have_current_path(room_messages_path(@room_user.room))
+
       # 送信した値がブラウザに表示されていることを確認する
       expect(page).to have_content(post)
     end
@@ -54,6 +58,7 @@ RSpec.describe 'メッセージ投稿機能', type: :system do
 
       # 添付する画像を定義する
       image_path = Rails.root.join('public/images/test_image.png')
+
       # 画像選択フォームに画像を添付する
       attach_file('message[image]', image_path, make_visible: true)
 
@@ -62,8 +67,10 @@ RSpec.describe 'メッセージ投稿機能', type: :system do
         find('input[name="commit"]').click
         sleep 1
       }.to change { Message.count }.by(1)
+
       # 投稿一覧画面に遷移していることを確認する
       expect(page).to have_current_path(room_messages_path(@room_user.room))
+
       # 送信した画像がブラウザに表示されていることを確認する
       expect(page).to have_selector('img')
     end
@@ -80,16 +87,20 @@ RSpec.describe 'メッセージ投稿機能', type: :system do
 
       # 画像選択フォームに画像を添付する
       attach_file('message[image]', image_path, make_visible: true)
+
       # 値をテキストフォームに入力する
       post = 'テスト'
       fill_in 'message_content', with: post
+
       # 送信した値がDBに保存されていることを確認する
       expect {
         find('input[name="commit"]').click
         sleep 1
       }.to change { Message.count }.by(1)
+
       # 送信した値がブラウザに表示されていることを確認する
       expect(page).to have_content(post)
+
       # 送信した画像がブラウザに表示されていることを確認する
       expect(page).to have_selector('img')
     end
